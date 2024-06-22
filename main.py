@@ -1,6 +1,6 @@
 import pygame
-import tilemap
 from loader import load_image
+from tilemap import *
 
 pygame.init()
 
@@ -10,7 +10,9 @@ screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 running = True
 
 
-tmap_grass = tilemap.Tilemap(10, 10, 'demo_assets/grass.png')
+grass_tile = Tile('demo_assets/grass.png', 'grass')
+empty_tile = NullTile()
+tmap_grass = Tilemap('map', [empty_tile, grass_tile])
 
 
 while running:
