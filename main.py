@@ -12,7 +12,7 @@ running = True
 
 grass_tile = Tile('demo_assets/grass.png', 'grass')
 empty_tile = NullTile()
-tmap_grass = Tilemap('map', [empty_tile, grass_tile])
+tmap_grass = Tilemap('demo_assets/map', [empty_tile, grass_tile])
 
 
 while running:
