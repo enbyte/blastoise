@@ -60,7 +60,9 @@ class Tilemap:
             y += self.tile_size[1]
 
     def get_tile_coordinates_at_point(self, worldspace_x, worldspace_y):
-        offset_x, offset_y = worldspace_x - self.x, self.y - worldspace_y
+        offset_x, offset_y = worldspace_x - self.x, worldspace_y - self.y
+
+        print("Offset: %d, %d, from position %d %d" % (offset_x, offset_y, self.x, self.y))
 
         if offset_x >= self.width or offset_y >= self.height:
             return None
@@ -74,7 +76,8 @@ class Tilemap:
         # return the tile at the given point
 
         tile_offset = self.get_tile_coordinates_at_point(worldspace_x, worldspace_y)
-        return (self.matrix[tile_offset[1]][tile_offset[0]] if tile_offset is not None else None)
+        if tile_offset is None: return None
+        return self.matrix[tile_offset[1]][tile_offset[0]]
     
     
 
