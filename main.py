@@ -1,8 +1,8 @@
 import pygame
 from pygame.locals import *
 
-from loader import load_image
 from tilemap import *
+from loader import load_image
 
 from particles import ParticleSystem, ImageParticle
 
@@ -15,20 +15,24 @@ FPS_CAP = 60
 ALERT_ON_LOW_FPS = False
 FPS_ALERT_THRESHOLD = 10
 
-SCREEN_WIDTH, SCREEN_HEIGHT = 500, 500
+SCREEN_WIDTH, SCREEN_HEIGHT = 1920, 1080
+SCREEN_FLAGS = DOUBLEBUF | HWACCEL | HWSURFACE | RESIZABLE
 
-screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT), flags=SCREEN_FLAGS)
 running = True
 
 
 grass_tile = Tile('demo_assets/grass.png', 'grass')
 empty_tile = NullTile()
-tmap_grass = Tilemap('demo_assets/map', [empty_tile, grass_tile], (0, 0))
+tmap_grass = Tilemap('demo_assets/map', [empty_tile, grass_tile], (0, SCREEN_HEIGHT - (5 * 32)))
+
+background_image = load_image('demo_assets/forest_background.jpg')
 
 clock = pygame.time.Clock()
 
 tiles_particlesystem = ParticleSystem(max_particles=1000, kill_after=100)
-grass_particle = ImageParticle('demo_assets/dirt.png', (5, 5))
+grass_particle = ImageParticle('demo_assets/grass.png', (5, 5))
+dirt_particle = ImageParticle('demo_assets/dirt.png', (5, 5))
 
 while running:
     for event in pygame.event.get():
@@ -40,9 +44,13 @@ while running:
             if clicked_tile is not None:
                 print("You clicked a %s!" % clicked_tile.get_name())
                 for i in range(10):
-                    tiles_particlesystem.add_particle(grass_particle, *util.random_transform(pygame.mouse.get_pos(), 10), random.randint(0, 360), 2)
+                    p = random.choice([grass_particle, dirt_particle])
+                    tiles_particlesystem.add_particle(p, *util.random_transform(pygame.mouse.get_pos(), 10), random.randint(0, 360), 2)
+        if event.type == KEYDOWN:
+            if event.key == K_p:
+                print(screen.get_rect())
 
-    screen.fill((0, 0, 0))
+    screen.blit(background_image, (0, 0))
 
     tmap_grass.draw(screen)
     tiles_particlesystem.draw(screen)
