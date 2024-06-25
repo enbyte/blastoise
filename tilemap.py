@@ -64,7 +64,7 @@ class Tilemap:
 
         print("Offset: %d, %d, from position %d %d" % (offset_x, offset_y, self.x, self.y))
 
-        if offset_x >= self.width or offset_y >= self.height:
+        if offset_x >= self.width or offset_y >= self.height or offset_x < 0 or offset_y < 0:
             return None
 
         tile_offset_x, tile_offset_y = offset_x // self.tile_size[0], offset_y // self.tile_size[1]
@@ -79,8 +79,3 @@ class Tilemap:
         if tile_offset is None: return None
         return self.matrix[tile_offset[1]][tile_offset[0]]
     
-    
-
-
-
-
