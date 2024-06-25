@@ -112,6 +112,9 @@ class ParticleSystem:
 
 def main():
     red_particle = ColoredParticle((255, 0, 0))
+    blue_particle = ColoredParticle((0, 0, 255))
+    green_particle = ColoredParticle((0, 255, 0))
+    purple_particle = ColoredParticle((255, 0, 255))
 
     particle_system = ParticleSystem(red_particle, max_particles=1000, kill_after=100)
 
@@ -130,7 +133,11 @@ def main():
 
         mouse_pos = pygame.mouse.get_pos()
         for i in range(5):
-            particle_system.add_particle(red_particle, *mouse_pos, random.randint(0, 360), random.randint(3, 10))
+            particle = purple_particle
+            direction = random.randint(0, 360)
+            speed = random.randint(3, 10)
+
+            particle_system.add_particle(particle, *mouse_pos, direction, speed)
 
         particle_system.draw(screen)
 

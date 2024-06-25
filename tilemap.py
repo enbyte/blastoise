@@ -28,9 +28,11 @@ class NullTile(Tile):
     def draw(self, surface, x, y):
         pass
 class Tilemap:
-    def __init__(self, matrix_path, tileset, tile_size=(32, 32)):
+    def __init__(self, matrix_path, tileset, position, tile_size=(32, 32)):
 
         self.matrix = load_matrix(matrix_path)
+
+        self.x, self.y = position
 
         self.tile_width = len(self.matrix[0]) # the number of tiles there are in the width
         self.tile_height = len(self.matrix)
@@ -48,14 +50,33 @@ class Tilemap:
     def get_tileset_index(self, tile):
         return self.tileset.index(tile)
 
-    def draw(self, surface, x, y):
-        cached_x = x
+    def draw(self, surface):
+        x, y = self.x, self.y
         for row in self.matrix:
             for tile in row:
                 tile.draw(surface, x, y)
                 x += self.tile_size[0]
-            x = cached_x
+            x = self.x
             y += self.tile_size[1]
+
+    def get_tile_coordinates_at_point(self, worldspace_x, worldspace_y):
+        offset_x, offset_y = worldspace_x - self.x, self.y - worldspace_y
+
+        if offset_x >= self.width or offset_y >= self.height:
+            return None
+
+        tile_offset_x, tile_offset_y = offset_x // self.tile_size[0], offset_y // self.tile_size[1]
+        
+        return tile_offset_x, tile_offset_y
+    
+
+    def get_tile_at_point(self, worldspace_x, worldspace_y):
+        # return the tile at the given point
+
+        tile_offset = self.get_tile_coordinates_at_point(worldspace_x, worldspace_y)
+        return (self.matrix[tile_offset[1]][tile_offset[0]] if tile_offset is not None else None)
+    
+    
 
 
 
