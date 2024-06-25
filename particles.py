@@ -37,9 +37,8 @@ class ImageParticle:
 
 
 class ParticleSystem:
-    def __init__(self, particle_type, max_particles=None, starting_timestep=0, timestep_delta=1, kill_after=None):
+    def __init__(self, max_particles=None, starting_timestep=0, timestep_delta=1, kill_after=None):
         self.particles = {}
-        self.particle_type = particle_type
         self.max_particles = max_particles
 
         self._timestep = starting_timestep

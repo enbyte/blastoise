@@ -4,7 +4,9 @@ from pygame.locals import *
 from loader import load_image
 from tilemap import *
 
-import math
+from particles import ParticleSystem, ImageParticle
+
+import math, random
 
 pygame.init()
 
@@ -25,6 +27,9 @@ tmap_grass = Tilemap('demo_assets/map', [empty_tile, grass_tile], (0, 0))
 
 clock = pygame.time.Clock()
 
+tiles_particlesystem = ParticleSystem(max_particles=1000, kill_after=100)
+grass_particle = ImageParticle('demo_assets/dirt.png', (5, 5))
+
 while running:
     for event in pygame.event.get():
         if event.type == QUIT:
@@ -34,10 +39,13 @@ while running:
             clicked_tile = tmap_grass.get_tile_at_point(*pygame.mouse.get_pos())
             if clicked_tile is not None:
                 print("You clicked a %s!" % clicked_tile.get_name())
+                for i in range(10):
+                    tiles_particlesystem.add_particle(grass_particle, *util.random_transform(pygame.mouse.get_pos(), 10), random.randint(0, 360), 2)
 
     screen.fill((0, 0, 0))
 
     tmap_grass.draw(screen)
+    tiles_particlesystem.draw(screen)
 
     pygame.display.flip()
 
